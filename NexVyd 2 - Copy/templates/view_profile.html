@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Profile - AI Damage Detection</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            padding: 20px;
+        }
+
+        .nav-buttons {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .home-button, .user-profile {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .home-button:hover, .user-profile:hover {
+            background-color: rgba(255, 255, 255, 1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .home-button i, .user-profile i {
+            font-size: 1.5rem;
+            color: #1e3c72;
+        }
+
+        .user-profile {
+            position: relative;
+        }
+
+        .profile-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            display: none;
+            z-index: 1000;
+        }
+
+        .user-profile:hover .profile-dropdown {
+            display: block;
+        }
+
+        .profile-dropdown a {
+            display: block;
+            padding: 10px 20px;
+            color: #2d3748;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .profile-dropdown a:hover {
+            background-color: #f1f1f1;
+        }
+
+        .profile-container {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            width: 900px;
+            max-width: 90%;
+            animation: fadeIn 1s ease-out;
+        }
+
+        h2 {
+            text-align: center;
+            color: #1e3c72;
+            margin-top: 0;
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+
+        .profile-row {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .profile-column {
+            flex: 1;
+        }
+
+        .profile-item {
+            margin-bottom: 1.5rem;
+        }
+
+        .profile-label {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .profile-value {
+            color: #4a5568;
+            font-size: 1rem;
+            padding: 0.75rem;
+            background-color: #f8fafc;
+            border-radius: 8px;
+            border: 2px solid #e2e8f0;
+        }
+
+        .edit-button {
+            background-color: #1e3c72;
+            color: white;
+            border: none;
+            padding: 1rem;
+            font-size: 1.1rem;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 2rem auto 0;
+            width: 200px;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .edit-button:hover {
+            background-color: #2a5298;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(30, 60, 114, 0.3);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-buttons">
+        <a href="/" class="home-button">
+            <i class="fas fa-home"></i>
+        </a>
+        <div class="user-profile">
+            <i class="fas fa-user-circle"></i>
+            <div class="profile-dropdown">
+                <a href="/dashboard">Dashboard</a>
+                <a href="/logout">Logout</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="profile-container">
+        <h2>User Profile</h2>
+        <div class="profile-row">
+            <div class="profile-column">
+                <div class="profile-item">
+                    <div class="profile-label">Full Name</div>
+                    <div class="profile-value" id="fullName">{{ user_info['name'] }}</div>
+                </div>
+                <div class="profile-item">
+                    <div class="profile-label">Email</div>
+                    <div class="profile-value" id="email">{{ user_info['email'] }}</div>
+                </div>
+                <div class="profile-item">
+                    <div class="profile-label">Phone Number</div>
+                    <div class="profile-value" id="phoneNumber">{{ user_info['contact_number'] }}</div>
+                </div>
+                <div class="profile-item">
+                    <div class="profile-label">Full Address</div>
+                    <div class="profile-value" id="fullAddress">{{ user_info['address'] }}</div>
+                </div>
+            </div>
+            <div class="profile-column">
+                <div class="profile-item">
+                    <div class="profile-label">Vehicle ID</div>
+                    <div class="profile-value" id="vehicleId">{{ user_info['vehicle_id'] }}</div>
+                </div>
+                <div class="profile-item">
+                    <div class="profile-label">Car Brand</div>
+                    <div class="profile-value" id="carBrand">{{ user_info['car_brand'] }}</div>
+                </div>
+                <div class="profile-item">
+                    <div class="profile-label">Car Model</div>
+                    <div class="profile-value" id="carModel">{{ user_info['model'] }}</div>
+                </div>
+            </div>
+        </div>
+        <a href="{{ url_for('edit_profile') }}" class="edit-button">Edit Profile</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - AI Damage Detection</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+        }
+
+        .login-container {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            width: 350px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        h2 {
+            text-align: center;
+            color: #1e3c72;
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #2d3748;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.9rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        input:focus {
+            border-color: #1e3c72;
+            box-shadow: 0 0 8px rgba(30, 60, 114, 0.3);
+            outline: none;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 10px;
+            top: 65%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #888;
+            font-size: 1.2rem;
+        }
+
+        button {
+            width: 100%;
+            padding: 0.9rem;
+            background-color: #1e3c72;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        button:hover {
+            background-color: #2a5298;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(30, 60, 114, 0.3);
+        }
+
+        .error-message {
+            color: #e53e3e;
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .signup-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #2d3748;
+        }
+
+        .signup-link a {
+            color: #1e3c72;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .signup-link a:hover {
+            color: #2a5298;
+            text-decoration: underline;
+        }
+
+        .nav-buttons {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .home-button {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .home-button:hover {
+            background-color: rgba(255, 255, 255, 1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .home-button i {
+            font-size: 1.5rem;
+            color: #1e3c72;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="nav-buttons">
+        <a href="/" class="home-button">
+            <i class="fas fa-home"></i>
+        </a>
+    </div>
+
+    <div class="login-container">
+        <h2>Login</h2>
+        <form id="login-form" action="{{ url_for('login') }}" method="POST">
+            <div class="input-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="email@example.com" required>
+            </div>
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Password" required>
+                <span class="password-toggle" onclick="togglePassword()">👁️</span>
+            </div>
+            <button type="submit">Login</button>
+        </form>
+        <div class="error-message" id="error-message"></div>
+        <div class="signup-link">
+            <p>Don't have an account? <a href="/signup">Sign Up</a></p>
+        </div>
+    </div>
+
+    <script>
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const passwordToggle = document.querySelector('.password-toggle');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                passwordToggle.textContent = '🔒';
+            } else {
+                passwordInput.type = 'password';
+                passwordToggle.textContent = '👁️';
+            }
+        }
+
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault(); // Prevent the default form submission
+
+            const formData = new FormData(e.target); // Get form data
+            const response = await fetch('/login', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+
+            const result = await response.json(); // Parse the JSON response
+
+            if (result.success) {
+                window.location.href = '/dashboard'; // Redirect to dashboard on success
+            } else {
+                // Display error message
+                document.getElementById('error-message').textContent = result.message;
+                gsap.from('#error-message', {duration: 0.3, opacity: 0, y: -10, ease: 'power2.out'});
+            }
+        });
+    </script>
+</body>
+</html>

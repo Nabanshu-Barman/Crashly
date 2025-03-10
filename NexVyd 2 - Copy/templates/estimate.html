@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Repair Estimate - AI Damage Detection</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            padding: 20px;
+        }
+
+        .estimate-container {
+            max-width: 900px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            animation: fadeIn 1s ease-out;
+        }
+
+        h2 {
+            text-align: center;
+            color: #1e3c72;
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+
+        .images {
+            display: flex;
+            justify-content: space-between;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .images img {
+            max-width: 48%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .images img:hover {
+            transform: scale(1.02);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        table, th, td {
+            border: 1px solid #e2e8f0;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+            color: #2d3748;
+        }
+
+        th {
+            background-color: #1e3c72;
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+
+        tr:hover {
+            background-color: #edf2f7;
+        }
+
+        .total-cost {
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-top: 2rem;
+            color: #1e3c72;
+        }
+
+        .damage-severity {
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #1e3c72;
+        }
+
+        .severity-minor {
+            color: green;
+        }
+
+        .severity-moderate {
+            color: orange;
+        }
+
+        .severity-severe {
+            color: red;
+        }
+
+        .insurance-form {
+            margin-top: 2rem;
+        }
+
+        .insurance-form label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #1e3c72;
+        }
+
+        .insurance-form select {
+            width: 100%;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .insurance-form button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #1e3c72;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .insurance-form button:hover {
+            background-color: #2a5298;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(30, 60, 114, 0.3);
+        }
+
+        .print-button {
+            display: block;
+            width: 200px;
+            margin: 2rem auto 0;
+            padding: 12px;
+            background-color: #1e3c72;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .print-button:hover {
+            background-color: #2a5298;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(30, 60, 114, 0.3);
+        }
+
+        @media print {
+            body {
+                background: none;
+            }
+            .estimate-container {
+                box-shadow: none;
+            }
+            .print-button {
+                display: none;
+            }
+        }
+
+        .nav-buttons {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .home-button, .user-profile {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .home-button:hover, .user-profile:hover {
+            background-color: rgba(255, 255, 255, 1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .home-button i, .user-profile i {
+            font-size: 1.5rem;
+            color: #1e3c72;
+        }
+
+        .user-profile {
+            position: relative;
+        }
+
+        .profile-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            display: none;
+            z-index: 1000;
+        }
+
+        .user-profile:hover .profile-dropdown {
+            display: block;
+        }
+
+        .profile-dropdown a {
+            display: block;
+            padding: 10px 20px;
+            color: #2d3748;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .profile-dropdown a:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-buttons">
+        <a href="/" class="home-button">
+            <i class="fas fa-home"></i>
+        </a>
+        <div class="user-profile">
+            <i class="fas fa-user-circle"></i>
+            <div class="profile-dropdown">
+                <a href="/view_profile">View Profile</a>
+                <a href="/dashboard">Dashboard</a>
+                <a href="/logout">Logout</a>
+            </div>
+        </div>
+    </div>
+    <div class="estimate-container">
+        <h2>Quotation for Damage Recovery</h2>
+        <div class="images">
+            <img src="{{ url_for('static', filename=original_image) }}" alt="Original Image">
+            <img src="{{ url_for('static', filename=detected_image) }}" alt="Detected Image">
+        </div>
+        <div class="repair-costs">
+            <h3>Estimated Repair Prices</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Part Name</th>
+                        <th>Count</th>
+                        <th>Price per Part (₹)</th>
+                        <th>Total Price (₹)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for part, details in part_prices.items() %}
+                    <tr>
+                        <td>{{ part }}</td>
+                        <td>{{ details['count'] }}</td>
+                        <td>{{ details['price'] }}</td>
+                        <td>{{ details['total'] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="total-cost">
+                Total Estimated Price: ₹{{ total_repair_cost }}
+            </div>
+            <div class="damage-severity">
+                Damage Severity: <span class="severity-{{ damage_severity.lower() }}">{{ damage_severity }}</span>
+            </div>
+        </div>
+
+        <!-- Insurance Claim Form -->
+        <div class="insurance-form">
+            <h3>Insurance Claim Details</h3>
+            <form id="insuranceForm">
+                <label for="insuranceCompany">Insurance Company:</label>
+                <select id="insuranceCompany" name="insuranceCompany">
+                    {% for company in insurance_companies %}
+                    <option value="{{ company.CompanyID }}">{{ company.CompanyName }}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="damageType">Type of Damage:</label>
+                <select id="damageType" name="damageType">
+                    {% for damage in damage_types %}
+                    <option value="{{ damage.DamageTypeName }}">{{ damage.DamageTypeName }}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="policyTypeId">Insurance Policy Type:</label>
+                <select id="policyTypeId" name="policyTypeId">
+                    {% for policy in policy_types %}
+                    <option value="{{ policy.PolicyTypeID }}">{{ policy.PolicyTypeName }}</option>
+                    {% endfor %}
+                </select>
+
+                <button type="button" onclick="calculateClaim()">Calculate Claim</button>
+            </form>
+        </div>
+
+        <!-- Claimable Amount Result -->
+        <div id="claimResult" class="claim-result">
+            <h3>Claimable Amount</h3>
+            <p>Claimable Amount: ₹<span id="claimableAmount">{{ claimable_amount }}</span></p>
+        </div>
+
+        <button class="print-button" onclick="window.print()">Print Quotation</button>
+    </div>
+
+    <script>
+        async function calculateClaim() {
+            console.log("Calculate Claim button clicked!");
+
+            // Get user inputs
+            const insuranceCompanyId = document.getElementById('insuranceCompany').value;
+            const policyTypeId = document.getElementById('policyTypeId').value;
+            const damageType = document.getElementById('damageType').value;
+
+            // Get repair cost and severity from the backend (passed via Flask)
+            const totalRepairCost = parseFloat("{{ total_repair_cost }}");
+            const damageSeverity = "{{ damage_severity }}".toLowerCase();
+
+            console.log("Insurance Company ID:", insuranceCompanyId);
+            console.log("Policy Type ID:", policyTypeId);
+            console.log("Damage Type:", damageType);
+            console.log("Total Repair Cost:", totalRepairCost);
+            console.log("Damage Severity:", damageSeverity);
+
+            // Send data to backend for claim calculation
+            try {
+                const response = await fetch('/calculate_claim', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        company_id: insuranceCompanyId,
+                        policy_type_id: policyTypeId,
+                        severity_level: damageSeverity,
+                        estimated_repair_cost: totalRepairCost,
+                        damage_type: damageType
+                    }),
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    // Display the claimable amount
+                    document.getElementById('claimableAmount').textContent = result.claimable_amount.toFixed(2);
+                } else {
+                    console.error("Error calculating claim:", result.error);
+                    alert("An error occurred while calculating the claim. Please try again.");
+                }
+            } catch (error) {
+                console.error("Error calculating claim:", error);
+                alert("An error occurred while calculating the claim. Please try again.");
+            }
+        }
+    </script>
+</body>
+</html>

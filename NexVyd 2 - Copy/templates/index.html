@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crashly - AI Car Damage Detection</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #ff4757;
+            --secondary-color: #1e3c72;
+            --text-light: #ffffff;
+            --bg-gradient: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            color: var(--text-light);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .navbar {
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            background: rgba(30, 60, 114, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        .brand {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: transform 0.3s;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .login-btn {
+            padding: 0.8rem 1.5rem;
+            background: var(--primary-color);
+            border-radius: 30px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4);
+        }
+
+        .hero {
+            padding: 180px 5% 100px;
+            text-align: center;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            background: linear-gradient(rgba(30, 60, 114, 0.9), rgba(30, 60, 114, 0.9)),
+                        url('https://images.unsplash.com/photo-1553440569-bcc63803a83d?auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 2.5rem;
+            opacity: 0.9;
+        }
+
+        .get-started {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .get-started h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .button-group a {
+            padding: 0.8rem 1.5rem;
+            background: var(--primary-color);
+            border-radius: 30px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .button-group a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4);
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 4rem 5%;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .feature {
+            padding: 2rem;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .feature i {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .team-section {
+            padding: 4rem 5%;
+            text-align: center;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .team-member {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .team-member:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .social-links {
+            margin-top: 1rem;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            color: var(--text-light);
+            font-size: 1.2rem;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
+            color: var(--primary-color);
+        }
+
+        footer {
+            padding: 2rem 5%;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.2);
+            margin-top: auto;
+        }
+
+        .team-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .team-link:hover {
+            text-decoration: underline;
+            opacity: 0.9;
+        }
+
+        [data-aos] {
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .button-group {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <a href="/" class="brand" data-aos="fade-right">Crashly</a>
+        <div class="nav-links">
+            <a href="/login" class="login-btn" data-aos="fade-left">Login</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div data-aos="zoom-in">
+            <h1>Revolutionizing Car Damage Assessment</h1>
+            <p>Powered by YOLOv8 AI Technology - Instant Detection, Cost & Insurance Analysis</p>
+            <div class="get-started" data-aos="fade-up" data-aos-delay="200">
+                <h3>Get Started Today</h3>
+                <div class="button-group">
+                    <a href="/login">Login</a>
+                    <a href="/signup">Signup</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="feature" data-aos="fade-up">
+            <i class="fas fa-bolt"></i>
+            <h3>Real-Time Analysis</h3>
+            <p>Instant damage detection with insurance policy integration</p>
+        </div>
+        <div class="feature" data-aos="fade-up" data-aos-delay="200">
+            <i class="fas fa-robot"></i>
+            <h3>AI-Powered Detection</h3>
+            <p>YOLOv8 powered damage severity assessment</p>
+        </div>
+        <div class="feature" data-aos="fade-up" data-aos-delay="400">
+            <i class="fas fa-chart-line"></i>
+            <h3>Smart Estimations</h3>
+            <p>Accurate repair costs & insurance calculations</p>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="team-section" data-aos="fade-up">
+        <h2>Development Team</h2>
+        <div class="team-grid">
+            <div class="team-member">
+                <h4>Nabanshu Barman</h4>
+                <div class="social-links">
+                    <a href="https://github.com/Nabanshu-Barman" target="_blank">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://linkedin.com/in/nabanshu-barman-323153349" target="_blank">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="team-member">
+                <h4>Kabilesh C</h4>
+                <div class="social-links">
+                    <a href="https://github.com/kabilesh-c" target="_blank">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://linkedin.com/in/kabilesh-c20" target="_blank">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2025 Crashly. All rights reserved</p>
+        <p>Developed with ❤️ by <a href="mailto:crashly.nexvyd@gmail.com" class="team-link">Team NexVyd</a></p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 120
+        });
+    </script>
+</body>
+</html>
