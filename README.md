@@ -70,7 +70,9 @@ Visit: **[http://127.0.0.1:5000/](http://127.0.0.1:5000/)**
 ---
 
 ## 📸 Screenshots
-![Crashly Homepage](Screenshot%202025-03-09%20184903.png)
+![Screenshot 1](https://github.com/Nabanshu-Barman/Crashly/blob/main/Screenshot%202025-03-11%20113848.png?raw=true)
+![Screenshot 2](https://github.com/Nabanshu-Barman/Crashly/blob/main/Screenshot%202025-03-11%20113947.png?raw=true)
+
 
 ---
 
